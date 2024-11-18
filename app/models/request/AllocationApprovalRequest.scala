@@ -1,13 +1,12 @@
-package models
+package models.request
 
-import models.entity.Allocation
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class AllocationApprovalRequest(
-                              allocationId: Long,
-                              isApproved: Boolean
-                            )
+    allocationId: Long,
+    isApproved: Boolean
+)
 
 object AllocationApprovalRequest {
   // Read for the Allocation fields

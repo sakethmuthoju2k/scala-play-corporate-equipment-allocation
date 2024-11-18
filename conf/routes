@@ -42,7 +42,7 @@ POST    /allocation/process/:allocationId    controllers.AllocationController.pr
 POST    /allocation/return          controllers.AllocationController.processReturnEquipment()
 
 # Update the status of equipment after maintenance
-PUT    /maintenance    controllers.MaintenanceController.updateMaintenanceStatusAction()
+POST    /maintenance    controllers.MaintenanceController.updateMaintenanceStatusAction()
 
 
 

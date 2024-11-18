@@ -1,7 +1,7 @@
 package controllers
 
-import models.{AllocationRequest, ReturnEquipment}
-import models.entity.Equipment
+import models.request.{AllocationRequest, ReturnEquipment}
+import models.response.ApiResponse
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import services.{AllocationService, EquipmentService}
@@ -19,35 +19,48 @@ class AllocationController @Inject()(
   def requestAllocation(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[AllocationRequest] match {
       case JsSuccess(allocation, _) =>
-        allocationService.requestEquipment(allocation).map(created =>
-          Created(Json.toJson(created)))
+        allocationService.requestEquipment(allocation).map{created =>
+          ApiResponse.successResult(201, Json.toJson(created))
+        }.recover {
+          case ex: Exception =>
+            ApiResponse.errorResult(s"Error creating allocationRequest: ${ex.getMessage}", 500)
+        }
       case JsError(errors) =>
-        Future.successful(BadRequest(Json.obj(
-          "message" -> "Invalid Allocation Request data",
-          "errors" -> JsError.toJson(errors))))
+        Future.successful(
+          ApiResponse.errorResult(
+            "Invalid Allocation Request data",
+            400
+          ))
     }
   }
 
   // get allocation details by allocation id
   def getAllocationDetails(allocationId: Long): Action[AnyContent] = Action.async {
     allocationService.getAllocationDetails(allocationId).map(created =>
-      Ok(Json.toJson(created))
+      ApiResponse.successResult(200, Json.toJson(created))
     )
   }
 
   // process the allocation request
   def processAllocation(allocationId: Long): Action[AnyContent] = Action.async {
-    allocationService.processAllocation(allocationId).map(updated =>
-      Ok(Json.toJson(updated))
-    )
+    allocationService.processAllocation(allocationId).map{updated =>
+      ApiResponse.successResult(200, Json.toJson(updated))
+    }.recover{
+      case ex: Exception =>
+        ApiResponse.errorResult(s"Error processing allocationRequest: ${ex.getMessage}", 500)
+    }
   }
 
   // process the equipment returned
   def processReturnEquipment(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[ReturnEquipment] match {
       case JsSuccess(req, _) =>
-        allocationService.returnEquipment(req).map(returned =>
-          Ok(Json.toJson(returned)))
+        allocationService.returnEquipment(req).map{returned =>
+          ApiResponse.successResult(200, Json.toJson(returned))
+        }.recover {
+          case ex: Exception =>
+            ApiResponse.errorResult(s"Error processing allocationRequest: ${ex.getMessage}", 500)
+        }
       case JsError(errors) =>
         Future.successful(BadRequest(Json.obj(
           "message" -> "Invalid Return Equipment Request data",

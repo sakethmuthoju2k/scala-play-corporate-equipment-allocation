@@ -1,16 +1,15 @@
-package models
+package models.response
 
-import models.entity.Allocation
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 import java.time.LocalDate
 
 case class ReturnEquipmentResponse(
-                            allocationId: Long,
-                            equipmentId: Long,
-                            returnDate: LocalDate
-                          )
+    allocationId: Long,
+    equipmentId: Long,
+    returnDate: LocalDate
+)
 
 object ReturnEquipmentResponse {
   // Read for the Allocation fields

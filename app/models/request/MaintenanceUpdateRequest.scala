@@ -1,13 +1,12 @@
-package models
+package models.request
 
-import models.entity.Allocation
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class MaintenanceUpdateRequest(
-                                      maintenanceId: Long,
-                                      isWorking: Boolean
-                                    )
+    maintenanceId: Long,
+    isWorking: Boolean
+)
 
 object MaintenanceUpdateRequest {
   // Read for the Allocation fields

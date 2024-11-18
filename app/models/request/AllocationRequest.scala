@@ -1,20 +1,20 @@
-package models
+package models.request
 
-import models.entity.Allocation
-import play.api.libs.json._
+import models.enums.EquipmentType.EquipmentType
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class AllocationRequest(
-                       employeeId: Long,
-                       equipmentType: String,
-                       purpose: Option[String] = None,
-                       createdBy: String
-                     )
+    employeeId: Long,
+    equipmentType: EquipmentType,
+    purpose: Option[String] = None,
+    createdBy: String
+)
 
 object AllocationRequest {
   // Read for the Allocation fields
   private val employeeIdReads: Reads[Long] = (JsPath \ "employeeId").read[Long]
-  private val equipmentTypeReads: Reads[String] = (JsPath \ "equipmentType").read[String]
+  private val equipmentTypeReads: Reads[EquipmentType] = (JsPath \ "equipmentType").read[EquipmentType]
   private val purposeReads: Reads[Option[String]] = (JsPath \ "purpose").readNullable[String]
   private val createdByReads: Reads[String] = (JsPath \ "createdBy").read[String]
 

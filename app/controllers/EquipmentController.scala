@@ -1,7 +1,7 @@
 package controllers
 
-import models.AllocationRequest
 import models.entity.Equipment
+import models.response.ApiResponse
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import services.EquipmentService
@@ -20,11 +20,16 @@ class EquipmentController @Inject()(
     request.body.validate[Equipment] match {
       case JsSuccess(equipment, _) =>
         equipmentService.create(equipment).map(created =>
-          Created(Json.toJson(created)))
+          ApiResponse.successResult(201, Json.obj("message"->"Equipment created", "id"-> created))
+        ).recover{
+          case ex: Exception =>
+            ApiResponse.errorResult(s"Error creating the equipment: ${ex.getMessage}", 400)
+        }
       case JsError(errors) =>
-        Future.successful(BadRequest(Json.obj(
-          "message" -> "Invalid equipment data",
-          "errors" -> JsError.toJson(errors))))
+        Future.successful(ApiResponse.errorResult(
+          "Invalid equipment data",
+          400
+        ))
     }
   }
 
@@ -33,19 +38,20 @@ class EquipmentController @Inject()(
     request.body.validate[Equipment] match {
       case JsSuccess(equipment, _) =>
         equipmentService.update(id, equipment).map {updated =>
-          Ok(Json.toJson(updated))
+          ApiResponse.successResult(200, Json.toJson(updated))
         }
       case JsError(errors) =>
-        Future.successful(BadRequest(Json.obj(
-          "message" -> "Invalid equipment data",
-          "errors" -> JsError.toJson(errors))))
+        Future.successful(ApiResponse.errorResult(
+          "Invalid equipment data",
+          400
+        ))
     }
   }
 
   // get details of an equipment by Id
   def getEquipmentDetailsById(id: Long): Action[AnyContent] = Action.async {
     equipmentService.getEquipmentById(id).map {equipment =>
-      Ok(Json.toJson(equipment))
+      ApiResponse.successResult(200, Json.toJson(equipment))
     }
   }
 }
