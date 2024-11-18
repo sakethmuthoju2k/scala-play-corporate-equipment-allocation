@@ -5,11 +5,11 @@ import models.enums.EquipmentCondition.EquipmentCondition
 import models.request.KafkaMessageFormat
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import play.api.libs.json._
-
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject._
 import java.util.Properties
+import config.EnvConfig
 
 object MessageTeam {
   val MANAGER = "MANAGER"
@@ -25,7 +25,7 @@ class KafkaProducerFactory @Inject()() {
 
   private val producer: KafkaProducer[String, String] = {
     val props = new Properties()
-    props.put("bootstrap.servers", "localhost:9092")
+    props.put("bootstrap.servers", EnvConfig.getKafkaBroker)
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     new KafkaProducer[String, String](props)
