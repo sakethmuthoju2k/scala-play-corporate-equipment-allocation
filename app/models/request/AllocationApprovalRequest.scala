@@ -9,7 +9,6 @@ case class AllocationApprovalRequest(
 )
 
 object AllocationApprovalRequest {
-  // Read for the Allocation fields
   private val allocationIdReads: Reads[Long] = (JsPath \ "allocationId").read[Long]
   private val isApprovedReads: Reads[Boolean] = (JsPath \ "isApproved").read[Boolean]
 

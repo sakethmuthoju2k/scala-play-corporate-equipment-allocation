@@ -2,7 +2,6 @@ package models.response
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-
 import java.time.LocalDate
 
 case class ReturnEquipmentResponse(
@@ -12,7 +11,6 @@ case class ReturnEquipmentResponse(
 )
 
 object ReturnEquipmentResponse {
-  // Read for the Allocation fields
   private val allocationIdReads: Reads[Long] = (JsPath \ "allocationId").read[Long]
   private val equipmentIdReads: Reads[Long] = (JsPath \ "equipmentId").read[Long]
   private val returnDateReads: Reads[LocalDate] = (JsPath \ "returnDate").read[LocalDate]

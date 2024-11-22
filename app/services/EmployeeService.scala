@@ -1,7 +1,7 @@
 package services
 
 import models.entity.{Allocation, Employee}
-import models.request.{AllocationApprovalRequest, AllocationRequest}
+import models.request.AllocationApprovalRequest
 import repositories.EmployeeRepository
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

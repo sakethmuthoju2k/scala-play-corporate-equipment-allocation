@@ -17,7 +17,7 @@ case class Allocation(
      requestDate: LocalDate,
      expectedReturnDate: Option[LocalDate] = None,
      returnDate: Option[LocalDate] = None,
-     createdBy: String
+     createdBy: String = "RECEPTIONIST"
 )
 
 object Allocation {
@@ -32,7 +32,7 @@ object Allocation {
   private val requestDateReads: Reads[LocalDate] = (JsPath \ "requestDate").read[LocalDate]
   private val expectedReturnDateReads: Reads[Option[LocalDate]] = (JsPath \ "expectedReturnDate").readNullable[LocalDate]
   private val returnDateReads: Reads[Option[LocalDate]] = (JsPath \ "returnDate").readNullable[LocalDate]
-  private val createdByReads: Reads[String] = (JsPath \ "createdBy").read[String]
+  private val createdByReads: Reads[String] = (JsPath \ "createdBy").readNullable[String].map(_.getOrElse("RECEPTIONIST"))
 
   // Combine all the reads
   implicit val allocationReads: Reads[Allocation] = (

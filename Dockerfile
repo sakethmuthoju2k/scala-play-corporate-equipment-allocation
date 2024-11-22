@@ -29,4 +29,4 @@ EXPOSE 9000
 ENV PLAY_HTTP_SECRET=secretkeyforcorporateequipmentallocationproject
 
 # Run the binary script when the container launches
-CMD ["./bin/scala-play", "-Dplay.http.secret.key=$PLAY_HTTP_SECRET"]
+CMD ["./bin/corporateequipmentallocation", "-Dplay.http.secret.key=$PLAY_HTTP_SECRET"]

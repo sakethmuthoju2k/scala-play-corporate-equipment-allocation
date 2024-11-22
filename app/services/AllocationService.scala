@@ -1,11 +1,10 @@
 package services
 
-import models.entity.{Allocation, Employee, Equipment, Maintenance}
+import models.entity.{Allocation, Maintenance}
 import models.enums.{AllocationStatus, EquipmentCondition, MaintenanceStatus}
 import models.request.{AllocationApprovalRequest, AllocationRequest, ReturnEquipment}
 import models.response.{AllocationResponse, ReturnEquipmentResponse}
 import repositories.{AllocationRepository, EmployeeRepository, EquipmentRepository}
-
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,7 +57,11 @@ class AllocationService @Inject()(
     allocationRepository.getAllocationDetailsById(request.allocationId).flatMap {allocation =>
       if(allocation.allocationStatus == AllocationStatus.APPROVAL_PENDING) {
         val allocationStatus = if(request.isApproved) AllocationStatus.REQUESTED else AllocationStatus.REJECTED
-        allocationRepository.updateAllocationStatus(request.allocationId, allocationStatus)
+        allocationRepository.updateAllocationStatus(request.allocationId, allocationStatus).map { ele =>
+
+          kafkaProducerFactory.sendEmployeeAllocationApprovalStatus(allocation.employeeId, request.allocationId, request.isApproved)
+          ele
+        }
       }else{
         Future.failed(new IllegalStateException(s"Allocation status is not APPROVAL_PENDING"))
       }
@@ -136,7 +139,7 @@ class AllocationService @Inject()(
             val updatedEquipment = equipment.copy(equipmentCondition=equipmentCondition, isAvailable = isWorking)
             equipmentService.update(updatedEquipment.id.get, updatedEquipment).map{_ =>{
               if(isWorking) {
-                // SEND NOTIFICATION TO INVENTORY TEAM
+                // Send notification to inventory team
                 kafkaProducerFactory.sendInventoryUpdateMessage(updatedAllocation, "RETURNED")
               }else{
                 val reportedDate = LocalDate.now()
@@ -148,7 +151,7 @@ class AllocationService @Inject()(
                     status = MaintenanceStatus.ISSUE_RAISED
                   )
                 )
-                // SEND NOTIFICATION TO MAINTENANCE TEAM
+                // Send notification to maintenance team
                 kafkaProducerFactory.sendMaintenanceNotification(updatedAllocation, reportedDate)
               }
 

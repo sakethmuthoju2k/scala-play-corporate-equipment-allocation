@@ -9,7 +9,6 @@ case class MaintenanceUpdateRequest(
 )
 
 object MaintenanceUpdateRequest {
-  // Read for the Allocation fields
   private val maintenanceIdReads: Reads[Long] = (JsPath \ "maintenanceId").read[Long]
   private val isWorkingReads: Reads[Boolean] = (JsPath \ "isWorking").read[Boolean]
 

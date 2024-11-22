@@ -10,7 +10,6 @@ object AllocationStatus extends Enumeration {
   val REQUESTED: Value = Value("REQUESTED")
   val ALLOCATED: Value = Value("ALLOCATED")
   val NOT_AVAILABLE: Value = Value("NOT_AVAILABLE")
-  val UNAVAILABLE: Value = Value("UNAVAILABLE")  // delete this
   val OVERDUE_RETURNED: Value = Value("OVERDUE_RETURNED")
   val RETURNED: Value = Value("RETURNED")
 

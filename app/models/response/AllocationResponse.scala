@@ -17,7 +17,6 @@ case class AllocationResponse(
 )
 
 object AllocationResponse {
-  // Read for the Allocation fields
   private val allocationIdReads: Reads[Long] = (JsPath \ "allocationId").read[Long]
   private val employeeIdReads: Reads[Long] = (JsPath \ "employeeId").read[Long]
   private val approvalRequiredReads: Reads[Boolean] = (JsPath \ "approvalRequired").read[Boolean]

@@ -12,7 +12,6 @@ case class AllocationRequest(
 )
 
 object AllocationRequest {
-  // Read for the Allocation fields
   private val employeeIdReads: Reads[Long] = (JsPath \ "employeeId").read[Long]
   private val equipmentTypeReads: Reads[EquipmentType] = (JsPath \ "equipmentType").read[EquipmentType]
   private val purposeReads: Reads[Option[String]] = (JsPath \ "purpose").readNullable[String]

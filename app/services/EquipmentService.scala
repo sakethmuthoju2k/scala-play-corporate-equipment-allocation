@@ -1,16 +1,13 @@
 package services
 
-import models.entity.{Allocation, Employee, Equipment}
+import models.entity.Equipment
 import models.enums.EquipmentCondition.EquipmentCondition
-import models.enums.EquipmentType
 import models.enums.EquipmentType.EquipmentType
-import models.request.AllocationRequest
-import models.response.AllocationResponse
-import repositories.{AllocationRepository, EquipmentRepository}
+import repositories.EquipmentRepository
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class EquipmentService @Inject()(equipmentRepository: EquipmentRepository) {

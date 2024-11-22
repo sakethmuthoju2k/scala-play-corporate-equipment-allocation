@@ -1,12 +1,10 @@
 package controllers
 
-import models.entity.Equipment
-import models.request.{AllocationRequest, MaintenanceUpdateRequest}
+import models.request.MaintenanceUpdateRequest
 import models.response.ApiResponse
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
-import services.{EquipmentService, MaintenanceService}
-
+import services.MaintenanceService
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -15,7 +13,9 @@ class MaintenanceController @Inject()(
                                      maintenanceService: MaintenanceService
                                    )(implicit ec: ExecutionContext) extends AbstractController(cc) {
 
-  // update an maintenance status equipment
+  /**
+   * Updates the maintenance status of equipment.
+   */
   def updateMaintenanceStatusAction(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[MaintenanceUpdateRequest] match {
       case JsSuccess(req, _) =>

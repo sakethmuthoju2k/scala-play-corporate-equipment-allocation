@@ -43,9 +43,8 @@ class EquipmentRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
       .map(ele => (ele.name, ele.model, ele.serialNumber, ele.equipmentType, ele.equipmentCondition, ele.isAvailable))
       .update((equipment.name, equipment.model, equipment.serialNumber, equipment.equipmentType, equipment.equipmentCondition, equipment.isAvailable))
 
-    // flatMap removes Some
     db.run(updateQuery).flatMap {_ =>
-      getEquipmentById(id) // Updated, hence get the `Person` details using `get(id)`
+      getEquipmentById(id)
     }
   }
 

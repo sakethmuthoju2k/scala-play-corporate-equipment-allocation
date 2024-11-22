@@ -2,7 +2,7 @@ package models.entity
 
 import models.enums.EquipmentCondition.EquipmentCondition
 import models.enums.EquipmentType.EquipmentType
-import models.enums.{EquipmentCondition, EquipmentType}
+import models.enums.EquipmentCondition
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 

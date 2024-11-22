@@ -15,7 +15,13 @@ class EmployeeController @Inject()(
     employeeService: EmployeeService
 )(implicit ec: ExecutionContext) extends AbstractController(cc) {
 
-  // Create an employee
+  /**
+   * Creates a new employee record in the system.
+   * Validates and processes the employee information provided in the JSON payload.
+   *
+   * @return An Action wrapper containing the HTTP response:
+   *         - 201 (Created) with the created employee ID and success message
+   */
   def createEmployee(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[Employee] match {
       case JsSuccess(employee, _) =>
@@ -36,19 +42,36 @@ class EmployeeController @Inject()(
     }
   }
 
-  // list employee allocation requests
+  /**
+   * Retrieves all allocation requests for a specific employee.
+   * Lists both pending and processed allocation requests associated with the employee.
+   *
+   * @param employeeId The unique identifier of the employee
+   * @return An Action wrapper containing the HTTP response:
+   *         - 200 (OK) with JSON array of allocation requests
+   */
   def getAllocationRequests(employeeId: Long): Action[AnyContent] = Action.async {
     employeeService.getAllocationsByEmpId(employeeId).map(data =>
       ApiResponse.successResult(200, Json.toJson(data)))
   }
 
-  // Get all equipment approval requests raised by employees under a specific manager
+  /**
+   * Retrieves all equipment approval requests raised by employees under a specific manager
+   * Returns allocation requests from employees reporting to the specified manager.
+   *
+   * @param employeeId The unique identifier of the manager
+   * @return An Action wrapper containing the HTTP response:
+   *         - 200 (OK) with JSON array of pending approval requests
+   */
   def getApprovalRequests(employeeId: Long): Action[AnyContent] = Action.async {
     employeeService.getApprovalRequests(employeeId).map(data =>
       ApiResponse.successResult(200, Json.toJson(data)))
   }
 
-  // Approve/ Reject the allocation request
+  /**
+   * Processes approval or rejection of an allocation request by a manager.
+   * Updates the allocation request status based on the manager's decision.
+   */
   def allocationRequestApproval(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[AllocationApprovalRequest] match {
       case JsSuccess(request, _) =>

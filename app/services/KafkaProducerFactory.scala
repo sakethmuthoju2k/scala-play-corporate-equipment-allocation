@@ -123,4 +123,19 @@ class KafkaProducerFactory @Inject()() {
 
     producer.send(createRecord(kafkaMessage))
   }
+
+  def sendEmployeeAllocationApprovalStatus(employeeId: Long, allocationId: Long, isApproved: Boolean): Unit = {
+    val status = if(isApproved) "APPROVED" else "REJECTED"
+    val message =
+      s"""Hello, #${employeeId}. Your allocation request status: #${allocationId} is ${status}""".stripMargin
+
+    val kafkaMessage = KafkaMessageFormat(
+      receiver = MessageTeam.EMPLOYEE,
+      messageType = "ALLOCATION_STATUS_UPDATE",
+      message = message
+    )
+
+    producer.send(createRecord(kafkaMessage))
+  }
+
 }

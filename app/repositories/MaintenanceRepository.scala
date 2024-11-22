@@ -1,11 +1,9 @@
 package repositories
 
 import models.enums.MaintenanceStatus.MaintenanceStatus
-
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-
 import java.time.LocalDate
 import ColumnMappings._
 import models.entity.Maintenance
